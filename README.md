@@ -6,4 +6,4 @@
 - Telegram Bot api key and Public channel to which it can publish
 
 # How to Run?
-- Just change placeholders in script and run python file
+- Just set telegram api key in env [TELEGRAM_BOT_API_KEY] and run python file

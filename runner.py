@@ -1,9 +1,10 @@
+import os
 import requests
 import json
 from datetime import datetime, timedelta
 
 COWIN_URL = "https://cdn-api.co-vin.in/api/v2/appointment/sessions/calendarByDistrict"
-TELEGRAM_URL = "https://api.telegram.org/bot[BOT_API_KEY]/sendMessage"
+TELEGRAM_URL = "https://api.telegram.org/bot{}/sendMessage".format(os.environ['TELEGRAM_BOT_API_KEY'])
 DISTRICTS_IDS_TO_FETCH = [16, 5, 11, 12, 4, 9]
 DISTRICTS_ID_CHANNEL_MAP = {
     16: '@u45WestGodavariAp',
@@ -18,7 +19,7 @@ DISTRICTS_ID_CHANNEL_MAP = {
 def _post_to_telegram(channel, message):
     data = {'chat_id': channel, 'text': message[:4096] if len(message) > 4096 else message}
     response = requests.request("POST", TELEGRAM_URL, headers={'content-type': 'application/json'}, data=json.dumps(data))
-    print ("Response from ".format(response.text), flush=True)
+    print ("Response from telegram status: {}, text: {}".format(response.status_code, response.text), flush=True)
 
 
 def _cowin_call(dt, district_id):
