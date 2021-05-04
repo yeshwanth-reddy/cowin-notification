@@ -5,16 +5,19 @@ from datetime import datetime, timedelta
 
 COWIN_URL = "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByDistrict"
 TELEGRAM_URL = "https://api.telegram.org/bot{}/sendMessage".format(os.environ['TELEGRAM_BOT_API_KEY'])
-DISTRICTS_IDS_TO_FETCH = [16, 5, 11, 12, 4, 9]
+DISTRICTS_IDS_TO_FETCH = [16, 5, 11, 12, 4, 9, 294, 265]
 DISTRICTS_ID_CHANNEL_MAP = {
     16: '@u45WestGodavariAp',
     5: '@u45GunturAp',
     11: '@u45EastGodavariAp',
     12: '@u45PrakasamAp',
     4: '@u45KrishnaAp',
-    9: '@u45AnantapurAp'
+    9: '@u45AnantapurAp',
+    294: '@u45BbmpKa',
+    265: '@u45BangaloreUrbanKa'
 }
-# 16 (West Godavari), 5 (Guntur), 11(East Godavari), 12(Prakasam), 4(Krishna), 9(Anantapur)
+# AP - 16 (West Godavari), 5 (Guntur), 11(East Godavari), 12(Prakasam), 4(Krishna), 9(Anantapur)
+# KA - 294 (Bangalore BBMP), 265 (Bangalore Urban)
 
 def _post_to_telegram(channel, message):
     data = {'chat_id': channel, 'text': message[:4096] if len(message) > 4096 else message}
