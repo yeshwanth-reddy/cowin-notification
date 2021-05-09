@@ -19,7 +19,7 @@ DISTRICTS_ID_CHANNEL_MAP = {
     4: '@u45KrishnaAp',
     9: '@u45AnantapurAp',
     294: '@u45BbmpKa',
-    265: '@u45BangaloreUrbanKa'
+    265: '@u45BbmpKa'
 }
 # AP - 16 (West Godavari), 5 (Guntur), 11(East Godavari), 12(Prakasam), 4(Krishna), 9(Anantapur)
 # KA - 294 (Bangalore BBMP), 265 (Bangalore Urban)
