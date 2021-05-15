@@ -9,7 +9,6 @@ conn = sqlite3.connect(os.environ['COWIN_DB_PATH'])
 COWIN_URL = "https://cdn-api.co-vin.in/api/v2/appointment/sessions/calendarByDistrict"
 TELEGRAM_URL = "https://api.telegram.org/bot{}/sendMessage".format(os.environ['TELEGRAM_BOT_API_KEY'])
 COWIN_BEARER_TOKEN = os.environ['COWIN_BEARER_TOKEN']
-DISTRICTS_IDS_TO_FETCH = [16, 5, 11, 12, 4, 9, 294, 265]
 TEST_TELEGRAM_CHANNEL = '@betaguytest'
 DISTRICTS_ID_CHANNEL_MAP = {
     16: '@u45WestGodavariAp',
@@ -21,6 +20,7 @@ DISTRICTS_ID_CHANNEL_MAP = {
     294: '@u45BbmpKa',
     265: '@u45BbmpKa'
 }
+DISTRICTS_IDS_TO_FETCH = [294, 265, 16, 5, 11, 12, 4, 9]
 # AP - 16 (West Godavari), 5 (Guntur), 11(East Godavari), 12(Prakasam), 4(Krishna), 9(Anantapur)
 # KA - 294 (Bangalore BBMP), 265 (Bangalore Urban)
 
@@ -71,7 +71,7 @@ def _cowin_call(dt, district_id):
     return response.json()
 
 def _get_address_from_center(center):
-    return '{}, {}, {}, {} - {}'.format(center.get('name'), center.get('block_name'), center.get('district_name'), center.get('state_name'), center.get('pincode'))
+    return '{}, {} - {}'.format(center.get('name'), center.get('block_name'), center.get('pincode'))
 
 def _process_cowin_slot_data(results):
     data = {}
@@ -81,7 +81,7 @@ def _process_cowin_slot_data(results):
         center_id = center.get('center_id')
         address = _get_address_from_center(center)
         for center_session in center['sessions']:
-            if center_session.get('min_age_limit') < 45 and center_session.get('available_capacity') > 0:
+            if center_session.get('min_age_limit') < 45 and center_session.get('available_capacity') >= 3:
                 if center_id not in data:
                     data[center_id] = {'address': address, 'slots': [], 'age': center_session.get('min_age_limit')}
                 data[center_id]['slots'].append(
@@ -92,7 +92,7 @@ def _process_cowin_slot_data(results):
     return data
 
 def _send_to_appriopriate_channel(district_id, data):
-    message = 'Vaccination centers for 18-44 group:\n'
+    message = ''
     center_count = 1
     already_notfied_slots_all_centers = _get_notified_slots_for_district(district_id)
     should_notify = None
@@ -109,10 +109,10 @@ def _send_to_appriopriate_channel(district_id, data):
                 # Already notified
                 print ("Already notofied notifocation id: {} slot data: {}".format(notifcation.get('id'), slot), flush=True)
                 continue
-            slot_msg = slot_msg + '{} {} slots are available on {}\n'.format(slot.get('available_capacity'), slot.get('vaccine'), slot_date.strftime('%B %d'))
+            slot_msg = slot_msg + '{} {} slots available on {}\n'.format(slot.get('available_capacity'), slot.get('vaccine'), slot_date.strftime('%B %d'))
             _upsert_slot_notification_details(notifcation_id, district_id, center_id, slot_date, age, slot.get('available_capacity'))
         if slot_msg:
-            message = message + '{}. {}\n'.format(center_count, center_data.get('address')) + slot_msg + '\n'
+            message = message + '{}\n'.format(center_count, center_data.get('address')) + slot_msg + '\n'
             center_count = center_count + 1
             should_notify = True
     if should_notify:
