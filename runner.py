@@ -62,7 +62,10 @@ def _cowin_call(dt, district_id):
         'district_id': district_id
     }
     headers = {'content-type': 'application/json', 'Cache-Control': 'no-cache',
-    'User-Agent': 'PostmanRuntime/7.26.8', 'authorization': 'Bearer {}'.format(COWIN_BEARER_TOKEN)
+    'origin': 'https://selfregistration.cowin.gov.in',
+    'referer': 'https://selfregistration.cowin.gov.in/',
+    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36',
+    'authorization': 'Bearer {}'.format(COWIN_BEARER_TOKEN)
     }
     response = requests.request("GET", COWIN_URL, headers=headers, data={}, params=params)
     if response.status_code/100 != 2:
