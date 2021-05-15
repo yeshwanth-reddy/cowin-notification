@@ -115,7 +115,7 @@ def _send_to_appriopriate_channel(district_id, data):
             slot_msg = slot_msg + '{} {} slots available on {}\n'.format(slot.get('available_capacity'), slot.get('vaccine'), slot_date.strftime('%B %d'))
             _upsert_slot_notification_details(notifcation_id, district_id, center_id, slot_date, age, slot.get('available_capacity'))
         if slot_msg:
-            message = message + '{}\n'.format(center_count, center_data.get('address')) + slot_msg + '\n'
+            message = message + '{}\n'.format(center_data.get('address')) + slot_msg + '\n'
             center_count = center_count + 1
             should_notify = True
     if should_notify:
