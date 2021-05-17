@@ -84,12 +84,12 @@ def _process_cowin_slot_data(results):
         center_id = center.get('center_id')
         address = _get_address_from_center(center)
         for center_session in center['sessions']:
-            if center_session.get('min_age_limit') < 45 and center_session.get('available_capacity') >= 3:
+            if center_session.get('min_age_limit') < 45 and center_session.get('available_capacity_dose1') >= 3:
                 if center_id not in data:
                     data[center_id] = {'address': address, 'slots': [], 'age': center_session.get('min_age_limit')}
                 data[center_id]['slots'].append(
                     {
-                    'available_capacity': center_session.get('available_capacity'), 'vaccine': center_session.get('vaccine'),
+                    'available_capacity': center_session.get('available_capacity_dose1'), 'vaccine': center_session.get('vaccine'),
                     'date': center_session.get('date')
                     })
     return data
