@@ -112,7 +112,7 @@ def _send_to_appriopriate_channel(district_id, data):
                 # Already notified
                 print ("Already notofied notifocation id: {} slot data: {}".format(notifcation.get('id'), slot), flush=True)
                 continue
-            slot_msg = slot_msg + '{} {} slots available on {}\n'.format(slot.get('available_capacity'), slot.get('vaccine'), slot_date.strftime('%B %d'))
+            slot_msg = slot_msg + '\nDate: {}\nVaccine: {}\nDose1: {} Slots\n'.format(slot_date.strftime('%B %d'), slot.get('vaccine'), slot.get('available_capacity'))
             _upsert_slot_notification_details(notifcation_id, district_id, center_id, slot_date, age, slot.get('available_capacity'))
         if slot_msg:
             message = message + '{}\n'.format(center_data.get('address')) + slot_msg + '\n'
